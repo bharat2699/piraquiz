@@ -1,20 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
-const app = express();
-
 import { createServer } from "http";
-const server = createServer(app);
-
 import { Server } from "socket.io";
-const io = new Server(server);
-
 import 'dotenv/config'
-
 import User from "./user/models/user.js";
 import Questions from "./quiz/models/question.js";
+import authRouter from './authentication/routes/auth.js';
 
-
+const app = express();
 app.use(express.json());
+const server = createServer(app);
+const io = new Server(server);
+app.use(authRouter);
+
 
 
 
