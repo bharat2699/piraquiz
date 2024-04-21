@@ -6,6 +6,7 @@ import 'dotenv/config'
 import User from "./user/models/user.js";
 import Questions from "./quiz/models/question.js";
 import authRouter from './authentication/routes/auth.js';
+import questionRouter from './quiz/routes/question.js';
 import authGuardMiddleware from "./authentication/utils/authGuardMiddleware.js";
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 const server = createServer(app);
 const io = new Server(server);
 app.use(authRouter);
+app.use(questionRouter);
 
 
 io.on("connection", async (socket) => {

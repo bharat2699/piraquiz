@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { randomUUID } from "crypto";
 
 const questionSchema = new Schema({
     uuid: {
@@ -9,43 +10,36 @@ const questionSchema = new Schema({
         type: String,
         required: true,
         maxLength: 100,
-        minLength: 5,
     },
     question: {
         type: String,
         required: true,
         maxLength: 500,
-        minLength: 10
     },
     option1: {
         type: String,
         required: true,
         maxLength: 100,
-        minLength: 3
     },
     option2: {
         type: String,
         required: true,
         maxLength: 100,
-        minLength: 3
     },
     option3: {
         type: String,
         required: true,
         maxLength: 100,
-        minLength: 3
     },
     option4: {
         type: String,
         required: true,
         maxLength: 100,
-        minLength: 3
     },
     correctOption: {
         type: String,
         required: true,
         maxLength: 100,
-        minLength: 3
     }
 });
 
