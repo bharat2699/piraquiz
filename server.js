@@ -44,58 +44,31 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("accepted", async (data) => {
-    if (data.topic == "Random") {
-      try {
-        const count = await Questions.countDocuments({ topic: data.topic });
-        for (let i = 0; i < 6; i++) {
-          const num = Math.floor(Math.random() * count) + 1;
-          const questions = await Questions.find({
-            topic: data.topic,
-          })
-            .skip(num)
-            .limit(1)
-            .exec();
-          if (questions.length == 5) {
-            await io
-              .to(data.socketid)
-              .to(data.mysocketid)
-              .emit("accepted", questions);
-            questions = [];
-          } else {
-            let temp = questions[0];
-            questions.push(temp);
-          }
-        }
-      } catch (err) {
-        console.log(err);
+    try {
+      const questions = await Questions.find({ topic: data.topic })
+        .limit(6)
+        .exec();
+
+      if (questions.length === 6) {
+        await io.to(data.socketid).to(data.mysocketid).emit("accepted", questions);
+      } else {
+        // Handle error: not enough questions available for the topic
       }
-    } else {
-      try {
-        const count = await Questions.countDocuments({
-          topic: data.topic
-        });
-        for (let i = 0; i < 6; i++) {
-          const num = Math.floor(Math.random() * count) + 1;
-          const questions = await Questions.find({
-            topic: data.topic,
-          })
-            .skip(num)
-            .limit(1)
-            .exec();
-          if (questions.length == 5) {
-            await io
-              .to(data.socketid)
-              .to(data.mysocketid)
-              .emit("accepted", questions);
-            questions = [];
-          } else {
-            let temp = questions[0];
-            questions.push(temp);
-          }
-        }
-      } catch (err) {
-        console.log(err);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  socket.on("nextQuestion", async (data) => {
+    try {
+      const question = await Questions.findOne({ _id: data.questionId });
+      if (question) {
+        io.to(data.socketid).emit("question", question);
+      } else {
+        // Handle error: question not found
       }
+    } catch (err) {
+      console.log(err);
     }
   });
 
