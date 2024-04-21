@@ -27,7 +27,7 @@ io.on("connection", async (socket) => {
           email: data,
         },
         {
-          socketid: socket.id,
+          socketId: socket.id,
         }
       );
     } catch (e) {
