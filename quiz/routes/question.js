@@ -12,6 +12,11 @@ router.post("/question", async (req, res) => {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
+        const existingQuestion = await Questions.findOne({ topic, question });
+        if (existingQuestion) {
+            return res.status(400).json({ error: "Question already exists" });
+        }
+
         const newQuestion = new Questions({
             topic,
             question,
