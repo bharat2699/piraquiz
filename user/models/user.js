@@ -66,7 +66,7 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
     try {
         const isMatch = await compare(enteredPassword, user.password);
         if (!isMatch) {
-            throw new Error('Passwords do not match');
+            return false;
         }
         return true;
     } catch (err) {
@@ -74,7 +74,6 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
     }
 };
 
-// model("User", userSchema);
 const User = model("User", userSchema);
 
 export default User;
